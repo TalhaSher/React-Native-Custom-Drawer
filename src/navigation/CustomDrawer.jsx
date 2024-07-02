@@ -21,7 +21,7 @@ const CustomDrawer = props => {
           type: 'success',
           text1: 'Sign out successful',
         });
-        navigation.navigate('Auth');
+        navigation.navigate('auth');
       });
   };
 

@@ -3,11 +3,12 @@ import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import DrawerNavigation from './src/navigation/DrawerNavigation';
 import Toast from 'react-native-toast-message';
+import StackNavigation from './src/navigation/StackNavigation';
 
 const App = () => {
   return (
     <NavigationContainer>
-      <DrawerNavigation />
+      <StackNavigation />
       <Toast />
     </NavigationContainer>
   );

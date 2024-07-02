@@ -12,12 +12,16 @@ import Toast from 'react-native-toast-message';
 import auth from '@react-native-firebase/auth';
 import {useNavigation} from '@react-navigation/native';
 import firestore from '@react-native-firebase/firestore';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
+import {signInWithGoogle} from '../../firebase/firebase';
 
 const Auth = () => {
   const [screen, setScreen] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigation = useNavigation();
+
+  //   ====================== LOGIN =============================
 
   const handleLoginSubmit = () => {
     try {
@@ -37,7 +41,7 @@ const Auth = () => {
           });
           setEmail('');
           setPassword('');
-          navigation.navigate('Home');
+          navigation.navigate('drawerNavigation');
         })
         .catch(error => {
           setEmail('');
@@ -68,6 +72,8 @@ const Auth = () => {
     }
   };
 
+  //   ====================== REGISTER =============================
+
   const handleRegisterSubmit = () => {
     if (!email || !password || !email.includes('@')) {
       return Toast.show({
@@ -86,7 +92,7 @@ const Auth = () => {
         addUserToFireStore(user);
         setEmail('');
         setPassword('');
-        navigation.navigate('Home');
+        navigation.navigate('drawerNavigation');
       })
       .catch(error => {
         if (error.code === 'auth/email-already-in-use') {
@@ -123,6 +129,8 @@ const Auth = () => {
       });
   };
 
+  //   ====================== Add User To Firebase =============================
+
   const addUserToFireStore = async user => {
     try {
       const data = {
@@ -138,6 +146,37 @@ const Auth = () => {
       console.error('Error adding users: ', error);
     }
   };
+
+  //   ====================== Google Sign In =============================
+
+  const handleGoogleSignIn = async () => {
+    try {
+      const userCredentials = await signInWithGoogle();
+      if (userCredentials) {
+        const {user} = userCredentials;
+        const userData = {
+          email: user.email,
+          photoURL: user.photoURL,
+          displayName: user.displayName,
+          emailVerified: user.emailVerified,
+        };
+
+        firestore()
+          .collection('users')
+          .doc(user.uid)
+          .set(userData, {merge: true});
+      }
+      navigation.navigate('drawerNavigation');
+    } catch (error) {
+      console.error('Google sign-in error:', error);
+      Toast.show({
+        type: 'error',
+        text1: 'Login Failed',
+      });
+    }
+  };
+
+  //   ====================== Submit Handler =============================
 
   const handleSubmit = () => {
     screen ? handleLoginSubmit() : handleRegisterSubmit();
@@ -193,6 +232,15 @@ const Auth = () => {
             <Text style={styles.ThemedButtonText}>
               {screen ? 'Login' : 'Register'}
             </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={handleGoogleSignIn}
+            style={[
+              styles.ButtonContainer,
+              {backgroundColor: 'white', marginTop: 20},
+            ]}>
+            <Text style={{color: 'black'}}>Sign In With Google</Text>
           </TouchableOpacity>
         </View>
       </View>
