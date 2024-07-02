@@ -6,9 +6,25 @@ import {
   DrawerItem,
 } from '@react-navigation/drawer';
 import {Linking} from 'react-native';
-import {HeartIcon} from 'react-native-heroicons/outline';
+import auth from '@react-native-firebase/auth';
+import {useNavigation} from '@react-navigation/native';
+import Toast from 'react-native-toast-message';
 
 const CustomDrawer = props => {
+  const navigation = useNavigation();
+
+  const handleLogout = () => {
+    auth()
+      .signOut()
+      .then(() => {
+        Toast.show({
+          type: 'success',
+          text1: 'Sign out successful',
+        });
+        navigation.navigate('Auth');
+      });
+  };
+
   return (
     <DrawerContentScrollView {...props}>
       <View style={{alignItems: 'center'}}>
@@ -18,11 +34,7 @@ const CustomDrawer = props => {
         />
       </View>
       <DrawerItemList {...props} />
-      <DrawerItem
-        label="Services"
-        onPress={() => Linking.openURL('https://fordnine.com/#services')}
-        icon={({size, color}) => <HeartIcon color={'red'} size={size} />}
-      />
+      <DrawerItem label="Logout" onPress={handleLogout} />
     </DrawerContentScrollView>
   );
 };

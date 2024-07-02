@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "281803274093",
+    "project_id": "my-project-8467-1688204711204",
+    "storage_bucket": "my-project-8467-1688204711204.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:281803274093:android:84a9df1edf255f7722cc64",
+        "android_client_info": {
+          "package_name": "com.appdrawernavigation"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDmf8DtLAo5OT4gR8EfNmx3MgEKYG7Rsfw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
