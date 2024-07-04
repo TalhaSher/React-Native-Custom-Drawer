@@ -5,8 +5,8 @@ import Header from '../Components/Header';
 const Setting = () => {
   return (
     <View style={{flex: 1}}>
-      <Header header="Setting" />
-      <Text style={styles.themedText}>Setting</Text>
+      <Header header="Settings" />
+      <Text style={styles.themedText}>Settings</Text>
     </View>
   );
 };

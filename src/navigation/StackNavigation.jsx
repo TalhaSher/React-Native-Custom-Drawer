@@ -4,29 +4,26 @@ import {createStackNavigator} from '@react-navigation/stack';
 import Auth from '../Screens/authentication/Auth';
 import DrawerNavigation from './DrawerNavigation';
 import {useAuth} from '../Context/Auth';
+import Loading from '../Screens/Loading';
 
 const Stack = createStackNavigator();
 
 const StackNavigation = () => {
-  const {currentUser} = useAuth();
+  const {currentUser, loading} = useAuth();
 
-  const LoggedInNavigation = () => (
-    <Stack.Navigator
-      screenOptions={{headerShown: false}}
-      initialRouteName="drawerNavigation">
-      <Stack.Screen name="drawerNavigation" component={DrawerNavigation} />
+  if (loading) {
+    return <Loading />;
+  }
+
+  return (
+    <Stack.Navigator screenOptions={{headerShown: false}}>
+      {currentUser ? (
+        <Stack.Screen name="drawerNavigation" component={DrawerNavigation} />
+      ) : (
+        <Stack.Screen name="auth" component={Auth} />
+      )}
     </Stack.Navigator>
   );
-
-  const LoggedOutNavigation = () => (
-    <Stack.Navigator
-      screenOptions={{headerShown: false}}
-      initialRouteName="auth">
-      <Stack.Screen name="auth" component={Auth} />
-    </Stack.Navigator>
-  );
-
-  return <>{currentUser ? <LoggedInNavigation /> : <LoggedOutNavigation />}</>;
 };
 
 export default StackNavigation;
