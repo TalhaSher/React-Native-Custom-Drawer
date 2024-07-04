@@ -3,7 +3,6 @@ import {
   Text,
   View,
   TextInput,
-  Pressable,
   TouchableOpacity,
 } from 'react-native';
 import React from 'react';
@@ -12,14 +11,14 @@ import Toast from 'react-native-toast-message';
 import auth from '@react-native-firebase/auth';
 import {useNavigation} from '@react-navigation/native';
 import firestore from '@react-native-firebase/firestore';
-import {GoogleSignin} from '@react-native-google-signin/google-signin';
-import {signInWithGoogle} from '../../firebase/firebase';
+import {useAuth} from '../../Context/Auth';
 
 const Auth = () => {
   const [screen, setScreen] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigation = useNavigation();
+  const {handleGoogle} = useAuth();
 
   //   ====================== LOGIN =============================
 
@@ -151,22 +150,7 @@ const Auth = () => {
 
   const handleGoogleSignIn = async () => {
     try {
-      const userCredentials = await signInWithGoogle();
-      if (userCredentials) {
-        const {user} = userCredentials;
-        const userData = {
-          email: user.email,
-          photoURL: user.photoURL,
-          displayName: user.displayName,
-          emailVerified: user.emailVerified,
-        };
-
-        firestore()
-          .collection('users')
-          .doc(user.uid)
-          .set(userData, {merge: true});
-      }
-      navigation.navigate('drawerNavigation');
+      handleGoogle();
     } catch (error) {
       console.error('Google sign-in error:', error);
       Toast.show({

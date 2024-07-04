@@ -9,20 +9,21 @@ import {Linking} from 'react-native';
 import auth from '@react-native-firebase/auth';
 import {useNavigation} from '@react-navigation/native';
 import Toast from 'react-native-toast-message';
+import {useAuth} from '../Context/Auth';
 
 const CustomDrawer = props => {
   const navigation = useNavigation();
 
+  const {logout} = useAuth();
+
   const handleLogout = () => {
-    auth()
-      .signOut()
-      .then(() => {
-        Toast.show({
-          type: 'success',
-          text1: 'Sign out successful',
-        });
-        navigation.navigate('auth');
+    logout().then(() => {
+      Toast.show({
+        type: 'success',
+        text1: 'Sign out successful',
       });
+      navigation.navigate('auth');
+    });
   };
 
   return (
